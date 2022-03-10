@@ -50,7 +50,7 @@ student.df = data.frame(nome = c("Sue", "Eva", "Henry", "Jan"),
                         sexo = c("f", "f", "m", "m"), 
                         anos = c(21,15,17,19))
 
-student.df$menor=ifelse(student.df$anos<18,"V","F")
+student.df$menor<-ifelse(student.df$anos<18,"V","F")
 
 #11)
 lapply(USArrests,sum)

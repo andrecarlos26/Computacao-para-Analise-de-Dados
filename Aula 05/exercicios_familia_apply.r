@@ -29,7 +29,7 @@ tapply(chickwts$weight, chickwts$feed, mean)
 
 #3)
 over300 <- function(x){
-  sum(x>300)
+  return(sum(x>300))
 }
 
 tapply(chickwts$weight, chickwts$feed, over300)
