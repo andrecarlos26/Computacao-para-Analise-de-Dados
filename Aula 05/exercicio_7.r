@@ -64,7 +64,3 @@ minhasNotas_1(Exe_1=c(NA,NA,7.5,1,10,2,5,6,7,8,10), VA_1=4,
 minhasNotas_1(Exe_1=c(10,9,7,5,10,4,5,6,7,8,10), VA_1=8, Exe_2=c(6,8,9,8,5,7,8), 
               Proj=7, VA_2=7, VA_3=9, Opt=4, threshold=8)
 #Resposta: 8.34090909090909 -- Aprovado!!
-
-#Exemplo da dúvida com o professor
-minhasNotas_1(Exe_1=c(5,7,9,4), VA_1=10, Exe_2=c(5,2), Proj=4, VA_2=c(8,5), 
-              VA_3=9, Opt=1, threshold=8)
