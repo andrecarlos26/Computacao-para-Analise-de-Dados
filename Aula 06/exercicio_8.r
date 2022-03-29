@@ -76,7 +76,6 @@ grep("<[^>]+>", c("<an xml tag>", "<opentag> <closetag>", "</closetag>", "<>",
 Gapminder <- read.delim("gapminderDataFiveYear.txt")
 Paises <- unique(Gapminder$country)
 
-grep("and", Paises, value = TRUE)
 grep("\\band\\b", Paises, value = TRUE)
 
 #18)
