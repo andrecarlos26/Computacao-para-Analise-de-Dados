@@ -1,0 +1,27 @@
+---
+title: "Teste 1"
+author: "Bruno"
+date: '2022-04-19'
+output: html_document
+---
+
+[Rural](http://www.ufrpe.br)
+
+# Título 1 {.tabset}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas pretium metus vel nibh consectetur interdum. Curabitur facilisis nibh ut quam tristique, ut blandit leo semper.
+
+## Aba 1
+**Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.** *Nullam nec elit convallis, lacinia lectus consectetur, condimentum ligula. Praesent eget lorem eleifend, euismod nunc nec, volutpat erat.*
+
+## Aba 2
+`Proin ligula libero, gravida volutpat velit nec, congue feugiat urna. Sed eleifend gravida nunc sit amet ultrices. Sed euismod pharetra rutrum.`
+
+<!-- Título 1: # header 1 -->
+<!-- Título 2: ## header 2 -->
+<!-- Título 3: ### header 3 -->
+<!-- Título 4: #### header 4 -->
+<!-- Seções com Abas: {.tabset} -->
+<!-- Texto Negrito : **bold** -->
+<!-- Texto Itálico: *italics* -->
+<!-- Texto Código: `code` -->
+<!-- Incluir um link: [Rural](www.ufrpe.br) -->

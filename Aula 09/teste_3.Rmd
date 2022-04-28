@@ -1,0 +1,11 @@
+---
+title: "Teste 3"
+author: "Bruno"
+date: '2022-04-25'
+output: html_document
+bibliography: /home/bruno/Documentos/Meu RCurso/Aula 09/ref.bib
+---
+
+@andrade2009methodology
+
+# Referência

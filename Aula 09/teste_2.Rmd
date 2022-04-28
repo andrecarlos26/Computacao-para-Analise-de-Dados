@@ -1,0 +1,20 @@
+---
+title: "Teste 2"
+author: "Bruno"
+date: '2022-04-19'
+output: html_document
+---
+
+<!-- ##### Chunks -->
+```{r Aula, echo=TRUE, warning=FALSE}
+summary(cars)
+```
+
+<!-- ##### Código in-line -->
+Existem `r nrow(iris)` opções de Iris.
+
+<!-- Equações -->
+Um modelo de regreção linear simples: $$Y = \beta_0 + \beta_1 x + \epsilon$$.
+
+<!-- Figuras -->
+![Primeira Figura.](/home/bruno/Documentos/Meu RCurso/Aula 09/R.jpeg)
