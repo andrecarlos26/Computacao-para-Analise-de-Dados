@@ -2,6 +2,7 @@ library(httr)
 library(jsonlite)
 library(dplyr)
 library(tm)
+library(wordcloud)
 
 #Função que faz a busca no Twitter
 search_recent_tweets <- function(bearer_token, query, max_results, lang=NULL) { 

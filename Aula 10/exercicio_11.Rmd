@@ -1,0 +1,173 @@
+---
+title: "Exercício 11"
+author: "Bruno Leite"
+date: '2022-05-06'
+output: html_document
+bibliography: /home/bruno/Documentos/Meu RCurso/Aula 10/ref.bib
+---
+
+# Mineração de Texto{.tabset}
+
+## Item 1
+Nuvem de palavra do discurso “Eu tenho um sonho” de Martin Luther King Jr. 
+Também plote as palavras mais frequentes.
+
+```{r Nuvem de Palavras MLK, echo=TRUE, message=FALSE, warning=FALSE}
+library(tm)
+library(wordcloud)
+library(readr)
+
+discurso <- read_file("http://www.sthda.com/sthda/RDoc/example-files/martin-luther-king-i-have-a-dream-speech.txt")
+
+# Convertendo texto para o formato corpus
+VS <- VectorSource(discurso)
+corpus <- Corpus(VS)
+
+# Limpeza do texto
+corpus <- tm_map(corpus, tolower)
+corpus <- tm_map(corpus, removePunctuation)
+corpus <- tm_map(corpus, stripWhitespace)
+corpus <- tm_map(corpus, removeNumbers)
+corpus <- tm_map(corpus, removeWords, stopwords('english'))
+
+# Convertendo para o formato de matrix
+tdm <- as.matrix(TermDocumentMatrix(corpus))
+
+# Frequências ordenadas de cada palavra
+fre <- sort(rowSums(tdm), decreasing=TRUE)
+
+#  Escolhendo palavras citadas ao menos 2 vezes
+aux <- subset(fre, fre>2)
+
+# Plota o gráfico de barras dos termos mais frequentes
+barplot(aux, las=2, col=rainbow(10))
+
+# Plota a nuvem de palavras
+wordcloud(corpus, min.freq = 1, max.words=60, random.order=FALSE, rot.per=0.35,
+          colors=brewer.pal(8, "Dark2"))
+```
+
+## Item 2
+Nuvem de palavra a partir dos twitters sobre "Brasil". Também faça uma análise 
+de sentimentos com relação a esses twitters coletados.
+
+```{r Nuvem de Palavras Brasil, echo=TRUE, message=FALSE, warning=FALSE}
+library(httr)
+library(jsonlite)
+library(dplyr)
+library(tm)
+library(wordcloud)
+library(syuzhet)
+
+# Função que realiza a busca no Twitter
+search_recent_tweets <- function(bearer_token, query, max_results, lang=NULL) { 
+  headers <- c(`Authorization` = sprintf('Bearer %s', bearer_token))
+  
+  if (max_results < 10) {
+    return("max_results deve ser maior ou igual a 10.")
+  }
+  
+  result <- data.frame()
+  first_try <- TRUE
+  
+  while (nrow(result) < max_results) {
+    
+    if (first_try) {
+      params <- list(query = query, tweet.fields = 'lang', max_results=100)
+      first_try <- FALSE
+    } else {
+      params <- list(query = query, tweet.fields = 'lang', max_results=100, pagination_token = tail(tweets, 1)$meta.next_token)
+    }
+    
+    response <- httr::GET(url = 'https://api.twitter.com/2/tweets/search/recent', httr::add_headers(.headers = headers), query = params)
+    obj <- httr::content(response, as = "text")
+    tweets <- fromJSON(obj, flatten = TRUE) %>% as.data.frame
+    if (!("meta.result_count" %in% colnames(tweets))) {
+      return(result)
+    } 
+    
+    if (!is.null(lang)) {
+      tweets <- tweets%>%filter(data.lang==lang)
+    }
+    result <- bind_rows(result, tweets)
+  }
+  
+  return(result[1:max_results,])
+}
+
+# Bearer Token necessário para acessar a API do Twitter
+bearer_token <- "AAAAAAAAAAAAAAAAAAAAAPfhbQEAAAAAVUeUujEKYKcgWDc3g0bXakoGLFc%3DS3FpG08LMzLmWWPgZLdeHKmaT207WQKKuucNJ0CTeupFdQ1Zs2"
+
+# Realizando a busca do #Brasil no Twitter (Retorna um DF)
+tweets <- search_recent_tweets(bearer_token, '#Brasil', 500, 'pt')
+
+# Convertendo os twittes para o formato corpus
+tweets_t <- paste(tweets$data.text, collapse=" ")
+tweets_S <- VectorSource(tweets_t)
+corpus <- Corpus(tweets_S)
+
+# Limpeza
+corpus <- tm_map(corpus, tolower)
+corpus <- tm_map(corpus, removePunctuation)
+corpus <- tm_map(corpus, stripWhitespace)
+corpus <- tm_map(corpus, removeWords, stopwords("portuguese"))
+removeURL <- function(x) gsub("http[^[:space:]]*", "", x)
+corpus <- tm_map(corpus, removeURL)
+removeNumPunct <- function(x) gsub("[^[:alpha:][:space:]]*", "", x)
+corpus <- tm_map(corpus, content_transformer(removeNumPunct))
+
+# Plota a nuvem de palavras
+wordcloud(corpus, min.freq = 3, max.words=Inf, random.order=FALSE, rot.per=0.15,
+         colors=brewer.pal(8, "Dark2"), scale=c(8,.2))
+
+# Análise de Sentimentos
+s <- get_nrc_sentiment(tweets$data.text)
+barplot(colSums(s), las=2, col = rainbow(10),
+          ylab = "Quantidade", main = "Sentimentos com Relação ao Brasil")
+```
+
+## Item 3
+5 equações complexas usando Latex.\n
+
+Fórmula de Bhaskara:
+$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$\n
+
+Teorema de Pitágoras:
+$c^{2}=a^{2}+b^{2}$\n
+
+Lei da Gravitação Universal:
+$F=G\frac{m_{1}m_{2}}{d^{2}}$\n
+
+Equivalência Entre Massa e Energia:
+$E=mc^{2}$\n
+
+Função Derivada do Cálculo:
+$\frac{df}{dt}=\lim_{h\rightarrow 0}\frac{f(t+h)-f(t)}{h}$
+
+## Item 4
+2 Figuras relacionadas a ciência de dados e 2 tabelas (dica: use datatable() do 
+pacote DT).
+
+![Fonte: https://fia.com.br/blog/ciencia-de-dados-data-science/](https://fia.com.br/blog/wp-content/uploads/2019/09/ciencia-de-dados-o-que-e-data-science.jpg)
+
+![Fonte: https://itforum.com.br/noticias/os-7-melhores-cursos-gratuitos-online-de-ciencia-de-dados-para-iniciantes/](https://itforum.com.br/wp-content/uploads/2020/08/cursos-online-gratuitos-cie%CC%82ncia-de-dados-2.jpg)
+```{r Tabelas, echo=FALSE, message=FALSE, warning=FALSE}
+library(DT)
+
+datatable(airquality, caption="Medidas diárias da qualidade do ar em New York, de Maio a Setembro de 1973.")
+datatable(mtcars, caption="Dados extraídos da revista Motor Trend US em 1974")
+```
+
+
+## Item 5
+5 referências usando o BibTex.
+
+@provost2013data
+
+@amaral2016introduccao
+
+@team2000r
+
+@araujo2013metodos
+
+@oliveira2004limpeza
